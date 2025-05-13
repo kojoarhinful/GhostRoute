@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GhostRoute – Clean URLs for Static Sites</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --fg: #111;
+      --card-bg: #f8f9fa;
+      --accent: #007bff;
+      --accent-hover: #0056b3;
+      --muted: #6c757d;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f0f0f;
+      --fg: #f0f0f0;
+      --card-bg: #1a1a1a;
+      --accent: #3399ff;
+      --accent-hover: #267fd9;
+      --muted: #aaa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 4rem 1.5rem 2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.75rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--muted);
+    }
+
+    .code-block {
+      background: var(--card-bg);
+      border: 1px solid #ccc2;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 1rem;
+      border-radius: 8px;
+      max-width: 700px;
+      margin: 1rem auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      overflow-x: auto;
+    }
+
+    .code-block input {
+      border: none;
+      background: none;
+      width: 100%;
+      color: var(--fg);
+      font-size: 0.95rem;
+    }
+
+    .code-block button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .code-block button:hover {
+      background: var(--accent-hover);
+    }
+
+    section.features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      padding: 2rem 1.5rem;
+      margin: 0 auto;
+    }
+
+    .feature {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: left;
+      border: 1px solid #ccc2;
+    }
+
+    .feature h3 {
+      margin-top: 0;
+      color: var(--accent);
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--card-bg);
+      border: 1px solid #ccc2;
+      color: var(--fg);
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding: 3rem 1.5rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+  <header>
+    <h1>GhostRoute</h1>
+    <p>Drop-in script to hide <code>.html</code> extensions on static sites. Clean URLs, no backend required.</p>
+
+    <div class="code-block">
+      <input id="cdnLink" readonly value="https://cdn.jsdelivr.net/gh/kojoarhinful/ghostroute/dist/ghostroute.js">
+      <button onclick="copy()">Copy</button>
+    </div>
+
+    <p style="margin-top: 1.5rem;">Add this in your HTML before closing <code>&lt;/body&gt;</code> tag.</p>
+  </header>
+
+  <section class="features">
+    <div class="feature">
+      <h3>No Config Needed</h3>
+      <p>Just drop in the script. No build steps, no server, no settings to mess with.</p>
+    </div>
+    <div class="feature">
+      <h3>Static Hosting Friendly</h3>
+      <p>Works on GitHub Pages, Netlify, Vercel, Firebase Hosting, or anywhere else.</p>
+    </div>
+    <div class="feature">
+      <h3>SEO and User Friendly</h3>
+      <p>Cleaner URLs are easier to remember, share, and improve your site’s SEO.</p>
+    </div>
+    <div class="feature">
+      <h3>Apache Support</h3>
+      <p>Use <code>ghostroute-gen</code> to generate a .htaccess file for extensionless URLs.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 GhostRoute • Built by Bismark Arhinful •
+    <a href="https://github.com/kojoarhinful/ghostroute" target="_blank">GitHub</a> •
+    <a href="https://npmjs.com/package/ghostroute" target="_blank">NPM</a>
+  </footer>
+
+  <script>
+    function copy() {
+      const input = document.getElementById("cdnLink");
+      input.select();
+      document.execCommand("copy");
+      alert("CDN link copied!");
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme");
+      html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    }
+  </script>
+
+  <!-- GhostRoute Script -->
+  <script src="https://cdn.jsdelivr.net/gh/kojoarhinful/ghostroute/dist/ghostroute.js"></script>
+  <script>ghostRoute();</script>
+
+</body>
+</html>
