@@ -1,4 +1,19 @@
 RewriteEngine On
+
+Options -Indexes
+
+# Redirect URLs with trailing slash to non-trailing slash
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} (.+)/$
+RewriteRule ^ %1 [L,R=301]
+
+# Serve .html files for URLs without extension
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^([^/]+)/$ $1.html [L]
+RewriteRule ^(.*)$ $1.html [L]
+
+# Fallback to index.html for 404s (optional for SPA-like behavior)
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule . /index.html [L]
