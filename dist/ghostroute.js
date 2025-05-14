@@ -1,20 +1,35 @@
+/**
+ * Removes trailing slashes from the URL and updates the browser history.
+ * @returns {void}
+ */
 function ghostRoute() {
-  const path = window.location.pathname;
-  const cleanPath = path.endsWith('/') ? path.slice(0, -1) : path;
-
-  if (cleanPath !== path) {
-    window.history.replaceState(null, '', cleanPath);
+  
+  if (typeof window === 'undefined' || !window.location || !window.history) {
+    console.warn('ghostRoute: Window or history API unavailable');
+    return;
+  }
+  
+  try {
+    const path = window.location.pathname;
+    
+    const cleanPath = path.replace(/\/+$/, '').replace(/\/+/g, '/');
+    
+    if (cleanPath !== path) {
+      window.history.replaceState(null, '', cleanPath || '/');
+    }
+  } catch (error) {
+    console.error('ghostRoute: Failed to update URL', error);
   }
 }
 
 // Run on page load
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', ghostRoute);
-} else {
-  ghostRoute();
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ghostRoute, { once: true });
+  } else {
+    ghostRoute();
+  }
 }
 
-// Make it available globally for inline use
-window.ghostRoute = ghostRoute;
-
-
+// Export for module usage
+export { ghostRoute };
